@@ -43,28 +43,30 @@ const getConnectedUsers = () => {
 // Track users waiting for a partner
 let waitingUsers = [];
 
-// Pass the io object to the function
+
+// Function to get a random user from the waiting list
+const getRandomUser = () => {
+  return waitingUsers[Math.floor(Math.random() * waitingUsers.length)];
+};
+
+// Connect random users
 const connectRandomUsers = (io, socket) => {
-  if (waitingUsers.length > 0) {
-    const partnerSocketId = waitingUsers.find(sId => sId !== socket.id);
-    if (partnerSocketId) {
-      const index = waitingUsers.indexOf(partnerSocketId);
-      waitingUsers.splice(index, 1); // Remove partner from waiting list
+  if (waitingUsers.length > 1) {
+    const partnerSocketId = getRandomUser();
+    const index = waitingUsers.indexOf(partnerSocketId);
+    waitingUsers.splice(index, 1); // Remove partner from waiting list
 
-      const currentUserId = connectedUsers.get(socket.id);
-      const partnerUserId = connectedUsers.get(partnerSocketId);
+    const currentUserId = connectedUsers.get(socket.id);
+    const partnerUserId = connectedUsers.get(partnerSocketId);
 
-      // Notify users that they are connected
-      io.to(socket.id).emit('connected', { userId: currentUserId, partnerUserId });
-      io.to(partnerSocketId).emit('connected', { userId: partnerUserId, partnerUserId: currentUserId });
-    } else {
-      // Add current user to the waiting list if not already there
-      if (!waitingUsers.includes(socket.id)) {
-        waitingUsers.push(socket.id);
-      }
-    }
+    // Notify users that they are connected
+    io.to(socket.id).emit('connected', { userId: currentUserId, partnerUserId });
+    io.to(partnerSocketId).emit('connected', { userId: partnerUserId, partnerUserId: currentUserId });
   } else {
-    waitingUsers.push(socket.id);
+    // Add current user to the waiting list if not already there
+    if (!waitingUsers.includes(socket.id)) {
+      waitingUsers.push(socket.id);
+    }
   }
 };
 
@@ -77,4 +79,5 @@ module.exports = {
   removeUser,
   getConnectedUsers, 
   connectRandomUsers,
+
 };

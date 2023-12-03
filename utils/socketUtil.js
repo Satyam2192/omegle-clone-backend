@@ -10,7 +10,7 @@ const socketUtil = (io) => {
     io.emit('connectedUsers', getConnectedUsers());
 
     // Connect random users when someone joins
-    connectRandomUsers(io, socket); // Pass io as the first argument
+    connectRandomUsers(io, socket);
 
     socket.on('disconnect', () => {
       console.log('User disconnected');
@@ -19,7 +19,7 @@ const socketUtil = (io) => {
       // If a user disconnects, check if there's another user in the waiting list
       connectRandomUsers(io, socket);
       io.emit('connectedUsers', getConnectedUsers());
-    })
+    });
 
     socket.on('message', (message) => {
       saveChatMessage(message);
@@ -47,3 +47,4 @@ const socketUtil = (io) => {
 };
 
 module.exports = socketUtil;
+
