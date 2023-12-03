@@ -11,7 +11,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
-    origin: 'https://sk-omegle.netlify.app/', // Replace with your frontend's URL
+    origin: 'https://sk-omegle.netlify.app', // Replace with your frontend's URL
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -22,7 +22,7 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: 'https://sk-omegle.netlify.app/', // Replace with your frontend's URL
+  origin: 'https://sk-omegle.netlify.app', // Replace with your frontend's URL
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   optionsSuccessStatus: 204,
